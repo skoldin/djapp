@@ -1,6 +1,8 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "DJAudioPlayer.h"
+#include "DeckGUI.h"
 
 //==============================================================================
 /*
@@ -34,25 +36,13 @@ private:
     //==============================================================================
     // Your private member variables go here...
 
-    juce::TextButton playButton{"PLAY"};
-    juce::TextButton stopButton{"STOP"};
-    juce::TextButton loadButton{"LOAD"};
-    juce::Slider volSlider{juce::Slider::SliderStyle::Rotary, juce::Slider::TextEntryBoxPosition::TextBoxBelow};
+    DJAudioPlayer player1;
+    DJAudioPlayer player2;
     
-    juce::Random rand;
+    DeckGUI deckGUI1{&player1};
+    DeckGUI deckGUI2{&player2};
     
-    bool playing;
-    
-    double phase;
-    double dphase;
-    
-    juce::AudioFormatManager formatManager;
-    
-    std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
-    
-    juce::AudioTransportSource transportSource;
-    
-    void loadURL(juce::URL audioURLL);
+    juce::MixerAudioSource mixerSource;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
