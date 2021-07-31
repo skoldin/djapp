@@ -73,11 +73,3 @@ void MainComponent::resized()
     deckGUI1.setBounds(0, 0, getWidth() / 2, getHeight());
     deckGUI2.setBounds(getWidth() / 2, 0, getWidth() / 2, getHeight());
 }
-
-void MainComponent::buttonClicked(juce::Button *button)
-{
-}
-
-void MainComponent::sliderValueChanged(juce::Slider *slider)
-{
-}
