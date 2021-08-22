@@ -14,7 +14,7 @@
 
 class DJAudioPlayer : public juce::AudioSource {
 public:
-    DJAudioPlayer();
+    DJAudioPlayer(juce::AudioFormatManager &_formatManager);
     ~DJAudioPlayer();
     
     /** lifecycle method that invokes before playing **/
@@ -40,8 +40,12 @@ public:
     void start();
     /** stops playing */
     void stop();
+    
+    /**  get the rellative position of the playhead */
+    double getPositionRelative();
+    
 private:
-    juce::AudioFormatManager formatManager;
+    juce::AudioFormatManager &formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
     juce::AudioTransportSource transportSource;
     juce::ResamplingAudioSource resampleSource{&transportSource, false, 2};

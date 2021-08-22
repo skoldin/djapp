@@ -10,13 +10,10 @@
 
 #include "DJAudioPlayer.h"
 
-DJAudioPlayer::DJAudioPlayer() {};
+DJAudioPlayer::DJAudioPlayer(juce::AudioFormatManager &_formatManager) : formatManager(_formatManager) {};
 DJAudioPlayer::~DJAudioPlayer() {};
 
 void DJAudioPlayer::prepareToPlay (int samplesPerBlockExpected, double sampleRate) {
-    formatManager.clearFormats();
-    formatManager.registerBasicFormats();
-    
     transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
     resampleSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
 };
@@ -73,4 +70,16 @@ void DJAudioPlayer::setPositionRelative(double pos) {
     
     double posInSecs  = transportSource.getLengthInSeconds()  * pos;
     setPosition(posInSecs);
+}
+
+double DJAudioPlayer::getPositionRelative()
+{
+    double lengthInSeconds = transportSource.getLengthInSeconds();
+    
+    if (lengthInSeconds == 0)
+    {
+        return 0;
+    }
+    
+    return transportSource.getCurrentPosition() / transportSource.getLengthInSeconds();
 }

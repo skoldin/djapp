@@ -12,7 +12,7 @@
 #include "DeckGUI.h"
 
 //==============================================================================
-DeckGUI::DeckGUI(DJAudioPlayer* _player) : player(_player)
+DeckGUI::DeckGUI(DJAudioPlayer* _player, juce::AudioFormatManager &formatManagerToUse, juce::AudioThumbnailCache &cacheToUse) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse)
 {
     addAndMakeVisible(playButton);
     addAndMakeVisible(stopButton);
@@ -20,6 +20,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player) : player(_player)
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(positionSlider);
+    addAndMakeVisible(waveformDisplay);
     
     playButton.addListener(this);
     stopButton.addListener(this);
@@ -35,10 +36,12 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player) : player(_player)
     positionSlider.addListener(this);
     positionSlider.setRange(0.0, 1.0);
 
+    startTimer(100);
 }
 
 DeckGUI::~DeckGUI()
 {
+    stopTimer();
 }
 
 void DeckGUI::paint (juce::Graphics& g)
@@ -63,13 +66,14 @@ void DeckGUI::paint (juce::Graphics& g)
 
 void DeckGUI::resized()
 {
-    double rowHeight = getHeight() / 6;
+    double rowHeight = getHeight() / 8;
     playButton.setBounds(0, 0, getWidth(), rowHeight);
     stopButton.setBounds(0, rowHeight, getWidth(), rowHeight);
     loadButton.setBounds(0, rowHeight * 2, getWidth(), rowHeight);
     volSlider.setBounds(0, rowHeight * 3, getWidth(), rowHeight);
     speedSlider.setBounds(0, rowHeight * 4, getWidth(), rowHeight);
     positionSlider.setBounds(0, rowHeight * 5, getWidth(), rowHeight);
+    waveformDisplay.setBounds(0, rowHeight * 6, getWidth(), rowHeight * 2);
 }
 
 void DeckGUI::buttonClicked(juce::Button *button)
@@ -89,6 +93,7 @@ void DeckGUI::buttonClicked(juce::Button *button)
         if (chooser.browseForFileToOpen())
         {
             player->loadURL(juce::URL{chooser.getResult()});
+            waveformDisplay.loadURL(juce::URL{chooser.getResult()});
         }
     }
 }
@@ -119,4 +124,9 @@ void DeckGUI::filesDropped(const juce::StringArray &files, int x, int y) {
     {
         player->loadURL(juce::URL{juce::File{files[0]}});
     }
+}
+
+void DeckGUI::timerCallback()
+{
+    waveformDisplay.setPositionRelative(player->getPositionRelative());
 }
