@@ -10,19 +10,21 @@
 
 #include <JuceHeader.h>
 #include "PlaylistComponent.h"
+#include "Track.h"
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent()
+PlaylistComponent::PlaylistComponent(juce::AudioFormatManager &formatManager)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    trackTitles.push_back("Track 1");
-    trackTitles.push_back("Track 2");
+//    trackTitles.push_back("Track 1");
+//    trackTitles.push_back("Track 2");
     
     addAndMakeVisible(tableComponent);
     
-    tableComponent.getHeader().addColumn("Track title", 1, 400);
-    tableComponent.getHeader().addColumn("", 2, 200);
+    tableComponent.getHeader().addColumn("Track title", titleColumnId, 400);
+    tableComponent.getHeader().addColumn("Length", lengthColumnId, 200);
+    tableComponent.getHeader().addColumn("", buttonColumnId, 200);
     
     tableComponent.setModel(this);
 }
@@ -60,7 +62,8 @@ void PlaylistComponent::resized()
 
 int PlaylistComponent::getNumRows()
 {
-    return trackTitles.size();
+    std::cout << "PlaylistComponent::getNumRows num of tracks " << tracks.size() << std::endl;
+    return tracks.size();
 }
 
 void PlaylistComponent::paintRowBackground (juce::Graphics & g, int rowNumber, int width, int height, bool rowIsSelected)
@@ -76,12 +79,20 @@ void PlaylistComponent::paintRowBackground (juce::Graphics & g, int rowNumber, i
 
 void PlaylistComponent::paintCell (juce::Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
 {
-    g.drawText(trackTitles[rowNumber], 2, 0, width - 4, height, juce::Justification::centredLeft, true);
+    std::cout << "PlaylistComponent::paintCell column " << columnId << std::endl;
+    
+    if (columnId == titleColumnId)
+    {
+        g.drawText(tracks[rowNumber].getTitle(), 2, 0, width - 4, height, juce::Justification::centredLeft, true);
+    } else if (columnId == lengthColumnId)
+    {
+        g.drawText(tracks[rowNumber].getLength(), 2, 0, width - 4, height, juce::Justification::centredLeft, true);
+    }
 };
 
 juce::Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnId, bool isRowSelected, juce::Component * existingComponentToUpdate)
 {
-    if (columnId == 2)
+    if (columnId == 3)
     {
         if (existingComponentToUpdate == nullptr)
         {
@@ -101,5 +112,27 @@ juce::Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int c
 void PlaylistComponent::buttonClicked(juce::Button* button)
 {
     int id = std::stoi(button->getComponentID().toStdString());
-    std::cout  <<  "PlaylistComponent::buttonClicked " << trackTitles[id] << std::endl;
+    std::cout  <<  "PlaylistComponent::buttonClicked " << tracks[id].getTitle() << std::endl;
 }
+
+void PlaylistComponent::addTrack(juce::File file)
+{
+//    std::cout << "Added track " << track.getTitle() << std::endl;
+    //  TODO: investigate why it is needed to register formats here, maybe the original pointer is not passed through and this is a new instance
+    formatManager.registerBasicFormats();
+    tracks.push_back(Track{file, formatManager});
+    tableComponent.updateContent();
+}
+
+//bool PlaylistComponent::isInterestedInFileDrag(const juce::StringArray &files) {
+//    std::cout  <<  "PlaylistComponent::isInterestedInFileDrag" << std::endl;
+//    return true;
+//    
+//}
+//void PlaylistComponent::filesDropped(const juce::StringArray &files, int x, int y) {
+//    std::cout  <<  "PlaylistComponent::filesDropped" << std::endl;
+//    if (files.size() == 1)
+//    {
+//        // TODO: load into the library
+//    }
+//}

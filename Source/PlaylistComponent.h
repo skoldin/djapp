@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include <vector>
 #include <string>
+#include "Track.h"
 
 //==============================================================================
 /*
@@ -22,7 +23,7 @@ class PlaylistComponent  : public juce::Component,
                            public juce::Button::Listener
 {
 public:
-    PlaylistComponent();
+    PlaylistComponent(juce::AudioFormatManager &formatManagerToUse);
     ~PlaylistComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -37,12 +38,23 @@ public:
     juce::Component* refreshComponentForCell(int rowNumber, int columnId, bool isRowSelected, juce::Component * existingComponentToUpdate) override;
     
     void buttonClicked(juce::Button* button) override;
+        
+    void addTrack(juce::File file);
+    
+//    bool isInterestedInFileDrag(const juce::StringArray &files) override;
+//    void filesDropped(const juce::StringArray &files, int x, int y) override;
 
 private:
     
     juce::TableListBox tableComponent;
     
-    std::vector<std::string> trackTitles;
+    std::vector<Track> tracks;
+    
+    juce::AudioFormatManager formatManager;
+    
+    const int titleColumnId = 1;
+    const int lengthColumnId = 2;
+    const int buttonColumnId = 3;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };

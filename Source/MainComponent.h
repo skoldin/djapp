@@ -35,14 +35,12 @@ private:
     DJAudioPlayer player1{formatManager};
     DJAudioPlayer player2{formatManager};
     
-    DeckGUI deckGUI1{&player1, formatManager, thumbCache};
-    DeckGUI deckGUI2{&player2, formatManager, thumbCache};
+    PlaylistComponent playlistComponent{formatManager};
+    
+    DeckGUI deckGUI1{&player1, formatManager, thumbCache, &playlistComponent};
+    DeckGUI deckGUI2{&player2, formatManager, thumbCache, &playlistComponent};
     
     juce::MixerAudioSource mixerSource;
-    
-    PlaylistComponent playlistComponent;
-    
-    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
+#include "PlaylistComponent.h"
 //==============================================================================
 /*
 */
@@ -23,7 +24,12 @@ class DeckGUI  : public juce::Component,
                  public juce::Timer
 {
 public:
-    DeckGUI(DJAudioPlayer* _player, juce::AudioFormatManager &formatManagerToUse, juce::AudioThumbnailCache &cacheToUse);
+    DeckGUI(
+            DJAudioPlayer* _player,
+            juce::AudioFormatManager &formatManagerToUse,
+            juce::AudioThumbnailCache &cacheToUse,
+            PlaylistComponent* playlist
+    );
     ~DeckGUI() override;
 
     void paint (juce::Graphics&) override;
@@ -39,6 +45,8 @@ public:
     void filesDropped(const juce::StringArray &files, int x, int y) override;
     
     void timerCallback();
+    
+    void loadFile(juce::File file);
 private:
     juce::TextButton playButton{"PLAY"};
     juce::TextButton stopButton{"STOP"};
@@ -49,8 +57,11 @@ private:
     juce::Slider positionSlider;
     
     DJAudioPlayer *player;
+    PlaylistComponent *playlist;
     
     WaveformDisplay waveformDisplay;
+    
+    juce::AudioFormatManager formatManager;
     
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)

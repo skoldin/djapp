@@ -12,7 +12,7 @@
 #include "DeckGUI.h"
 
 //==============================================================================
-DeckGUI::DeckGUI(DJAudioPlayer* _player, juce::AudioFormatManager &formatManagerToUse, juce::AudioThumbnailCache &cacheToUse) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse)
+DeckGUI::DeckGUI(DJAudioPlayer* _player, juce::AudioFormatManager &formatManagerToUse, juce::AudioThumbnailCache &cacheToUse, PlaylistComponent* _playlist) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse), playlist(_playlist)
 {
     addAndMakeVisible(playButton);
     addAndMakeVisible(stopButton);
@@ -92,8 +92,7 @@ void DeckGUI::buttonClicked(juce::Button *button)
 
         if (chooser.browseForFileToOpen())
         {
-            player->loadURL(juce::URL{chooser.getResult()});
-            waveformDisplay.loadURL(juce::URL{chooser.getResult()});
+            loadFile(chooser.getResult());
         }
     }
 }
@@ -122,11 +121,18 @@ void DeckGUI::filesDropped(const juce::StringArray &files, int x, int y) {
     std::cout  <<  "DeckGUI::filesDropped" << std::endl;
     if (files.size() == 1)
     {
-        player->loadURL(juce::URL{juce::File{files[0]}});
+        loadFile(juce::File{files[0]});
     }
 }
 
 void DeckGUI::timerCallback()
 {
     waveformDisplay.setPositionRelative(player->getPositionRelative());
+}
+
+void DeckGUI::loadFile(juce::File file)
+{
+    player->loadURL(juce::URL{file});
+    waveformDisplay.loadURL(juce::URL{file});
+    playlist->addTrack(file);
 }
