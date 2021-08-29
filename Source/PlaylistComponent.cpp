@@ -27,6 +27,8 @@ PlaylistComponent::PlaylistComponent(juce::AudioFormatManager &formatManager)
     tableComponent.getHeader().addColumn("", buttonColumnId, 200);
     
     tableComponent.setModel(this);
+    
+    std::vector<Track> tracks = playlistStorage.getTracks();
 }
 
 PlaylistComponent::~PlaylistComponent()
@@ -62,7 +64,6 @@ void PlaylistComponent::resized()
 
 int PlaylistComponent::getNumRows()
 {
-    std::cout << "PlaylistComponent::getNumRows num of tracks " << tracks.size() << std::endl;
     return tracks.size();
 }
 
@@ -79,14 +80,13 @@ void PlaylistComponent::paintRowBackground (juce::Graphics & g, int rowNumber, i
 
 void PlaylistComponent::paintCell (juce::Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
 {
-    std::cout << "PlaylistComponent::paintCell column " << columnId << std::endl;
-    
+
     if (columnId == titleColumnId)
     {
         g.drawText(tracks[rowNumber].getTitle(), 2, 0, width - 4, height, juce::Justification::centredLeft, true);
     } else if (columnId == lengthColumnId)
     {
-        g.drawText(tracks[rowNumber].getLength(), 2, 0, width - 4, height, juce::Justification::centredLeft, true);
+//        g.drawText(tracks[rowNumber].getLength(), 2, 0, width - 4, height, juce::Justification::centredLeft, true);
     }
 };
 
@@ -119,8 +119,8 @@ void PlaylistComponent::addTrack(juce::File file)
 {
 //    std::cout << "Added track " << track.getTitle() << std::endl;
     //  TODO: investigate why it is needed to register formats here, maybe the original pointer is not passed through and this is a new instance
-    formatManager.registerBasicFormats();
-    tracks.push_back(Track{file, formatManager});
+    tracks.push_back(Track{file});
+    playlistStorage.addTrack(file);
     tableComponent.updateContent();
 }
 

@@ -14,6 +14,7 @@
 #include <vector>
 #include <string>
 #include "Track.h"
+#include "PlaylistStorage.h"
 
 //==============================================================================
 /*
@@ -51,6 +52,8 @@ private:
     std::vector<Track> tracks;
     
     juce::AudioFormatManager formatManager;
+    
+    PlaylistStorage playlistStorage;
     
     const int titleColumnId = 1;
     const int lengthColumnId = 2;

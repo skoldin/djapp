@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="nnIGlo" name="DJApp" projectType="guiapp" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              cppLanguageStandard="17">
   <MAINGROUP id="fMuKV6" name="DJApp">
     <GROUP id="{C57FAC6E-50D6-F836-D0F3-9BC224FED899}" name="Source">
+      <FILE id="WJcoQ9" name="PlaylistStorage.cpp" compile="1" resource="0"
+            file="Source/PlaylistStorage.cpp"/>
+      <FILE id="TZg9HU" name="PlaylistStorage.h" compile="0" resource="0"
+            file="Source/PlaylistStorage.h"/>
       <FILE id="ilRUp7" name="Track.cpp" compile="1" resource="0" file="Source/Track.cpp"/>
       <FILE id="VJ5dEg" name="Track.h" compile="0" resource="0" file="Source/Track.h"/>
       <FILE id="XjcInl" name="PlaylistComponent.cpp" compile="1" resource="0"

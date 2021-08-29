@@ -11,10 +11,9 @@
 #include "Track.h"
 #include <JuceHeader.h>
 
-Track::Track(juce::File file, juce::AudioFormatManager &formatManager) :
+Track::Track(juce::File file) :
     url(juce::URL{file}),
-    title(file.getFileName().toStdString()),
-    reader(formatManager.createReaderFor(file))
+    title(file.getFileName().toStdString())
 {
     // auto* reader = formatManager.createReaderFor(url.createInputStream(false));
 }
@@ -24,17 +23,17 @@ std::string Track::getTitle()
     return title;
 }
 
-std::string Track::getLength() {
-    //auto* reader = formatManager.createReaderFor(url.createInputStream(false));
-    
-//    std::cout << reader->sampleRate << std::endl;
-
-    if (reader != nullptr)
-    {
-        std::unique_ptr<juce::AudioFormatReaderSource> newSource (new juce::AudioFormatReaderSource(reader, true));
-//        transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
-//        readerSource.reset (newSource.release());
-    }
-    
-    return "1";
-};
+//std::string Track::getLength() {
+//    //auto* reader = formatManager.createReaderFor(url.createInputStream(false));
+//    
+////    std::cout << reader->sampleRate << std::endl;
+//
+//    if (reader != nullptr)
+//    {
+//        std::unique_ptr<juce::AudioFormatReaderSource> newSource (new juce::AudioFormatReaderSource(reader, true));
+////        transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
+////        readerSource.reset (newSource.release());
+//    }
+//    
+//    return "1";
+//};

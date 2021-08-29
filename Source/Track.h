@@ -15,15 +15,15 @@
 
 class Track {
     public:
-        Track(juce::File file, juce::AudioFormatManager &formatManager);
+        Track(juce::File file);
         std::string getTitle();
-        std::string getLength();
+//        std::string getLength();
     private:
         juce::URL url;
         std::string title;
-        int length;
+//        int length;
 //        juce::AudioFormatManager &formatManager;
-        juce::AudioFormatReader* reader;
+//        juce::AudioFormatReader* reader;
 //        juce::AudioTransportSource transportSource;
 };
     
