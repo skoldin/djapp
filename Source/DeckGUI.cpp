@@ -12,11 +12,10 @@
 #include "DeckGUI.h"
 
 //==============================================================================
-DeckGUI::DeckGUI(DJAudioPlayer* _player, juce::AudioFormatManager &formatManagerToUse, juce::AudioThumbnailCache &cacheToUse, PlaylistComponent* _playlist) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse), playlist(_playlist)
+DeckGUI::DeckGUI(DJAudioPlayer* _player, juce::AudioFormatManager &formatManagerToUse, juce::AudioThumbnailCache &cacheToUse) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse)
 {
     addAndMakeVisible(playButton);
     addAndMakeVisible(stopButton);
-    addAndMakeVisible(loadButton);
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(positionSlider);
@@ -24,7 +23,6 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player, juce::AudioFormatManager &formatManager
     
     playButton.addListener(this);
     stopButton.addListener(this);
-    loadButton.addListener(this);
 
     volSlider.addListener(this);
     volSlider.setRange(0.0, 1.0);
@@ -69,7 +67,6 @@ void DeckGUI::resized()
     double rowHeight = getHeight() / 8;
     playButton.setBounds(0, 0, getWidth(), rowHeight);
     stopButton.setBounds(0, rowHeight, getWidth(), rowHeight);
-    loadButton.setBounds(0, rowHeight * 2, getWidth(), rowHeight);
     volSlider.setBounds(0, rowHeight * 3, getWidth(), rowHeight);
     speedSlider.setBounds(0, rowHeight * 4, getWidth(), rowHeight);
     positionSlider.setBounds(0, rowHeight * 5, getWidth(), rowHeight);
@@ -86,14 +83,6 @@ void DeckGUI::buttonClicked(juce::Button *button)
     {
         std::cout << "Stop button was clicked" << std::endl;
         player->stop();
-    } else if (button == &loadButton)
-    {
-        juce::FileChooser chooser{"Select a file..."};
-
-        if (chooser.browseForFileToOpen())
-        {
-            loadFile(chooser.getResult());
-        }
     }
 }
 
@@ -112,19 +101,6 @@ void DeckGUI::sliderValueChanged(juce::Slider *slider)
     }
 }
 
-bool DeckGUI::isInterestedInFileDrag(const juce::StringArray &files) {
-    std::cout  <<  "DeckGUI::isInterestedInFileDrag" << std::endl;
-    return true;
-    
-}
-void DeckGUI::filesDropped(const juce::StringArray &files, int x, int y) {
-    std::cout  <<  "DeckGUI::filesDropped" << std::endl;
-    if (files.size() == 1)
-    {
-        loadFile(juce::File{files[0]});
-    }
-}
-
 void DeckGUI::timerCallback()
 {
     waveformDisplay.setPositionRelative(player->getPositionRelative());
@@ -134,5 +110,4 @@ void DeckGUI::loadFile(juce::File file)
 {
     player->loadURL(juce::URL{file});
     waveformDisplay.loadURL(juce::URL{file});
-    playlist->addTrack(file);
 }

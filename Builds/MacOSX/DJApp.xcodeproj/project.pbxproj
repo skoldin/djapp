@@ -38,6 +38,7 @@
 		E5D0A3168668B29956FDD6C2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DE988513DFBA7068D7C6C3C /* IOKit.framework */; };
 		E67ADFE652DABED80A29C261 /* include_juce_gui_extra.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB09CD11125C81650E813027 /* include_juce_gui_extra.mm */; };
 		E6B8E6D0EA6323E5E083A9C5 /* DiscRecording.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE6880F7716DBB05FE994F7D /* DiscRecording.framework */; };
+		EF3DDBDD167024092744B00F /* DnDLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91408B1C27D83C8A8E86EE59 /* DnDLoader.cpp */; };
 		FB9CF07BD86D17530D56C512 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24690986222F05EC6614E704 /* Accelerate.framework */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,7 @@
 		8EDFCDA8A2425D7898DD9291 /* MainComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainComponent.h; path = ../../Source/MainComponent.h; sourceTree = SOURCE_ROOT; };
 		8F984699317BD70DCBCBE147 /* juce_audio_formats */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_formats; path = "~/JUCE/modules/juce_audio_formats"; sourceTree = "<absolute>"; };
 		8FC94B8B0503D99DAAF99842 /* DJAudioPlayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DJAudioPlayer.cpp; path = ../../Source/DJAudioPlayer.cpp; sourceTree = SOURCE_ROOT; };
+		91408B1C27D83C8A8E86EE59 /* DnDLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DnDLoader.cpp; path = ../../Source/DnDLoader.cpp; sourceTree = SOURCE_ROOT; };
 		9261D49759C5A81E24F206D4 /* DeckGUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeckGUI.h; path = ../../Source/DeckGUI.h; sourceTree = SOURCE_ROOT; };
 		96054C805DF9DC486BDFDADD /* include_juce_gui_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_basics.mm; path = ../../JuceLibraryCode/include_juce_gui_basics.mm; sourceTree = SOURCE_ROOT; };
 		980685156793BA2D23D96546 /* juce_graphics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_graphics; path = "~/JUCE/modules/juce_graphics"; sourceTree = "<absolute>"; };
@@ -76,6 +78,7 @@
 		9E9C692538E9283A45322BE5 /* juce_audio_devices */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_devices; path = "~/JUCE/modules/juce_audio_devices"; sourceTree = "<absolute>"; };
 		9F589C5ECD1429AF56C0BFE4 /* PlaylistComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlaylistComponent.h; path = ../../Source/PlaylistComponent.h; sourceTree = SOURCE_ROOT; };
 		9F9F6442D9866F1EE48EB00E /* DJApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DJApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0C7C3DF16F07D7230428C7E /* DnDLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DnDLoader.h; path = ../../Source/DnDLoader.h; sourceTree = SOURCE_ROOT; };
 		A1CCF6E42581C83B59281D76 /* PlaylistComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PlaylistComponent.cpp; path = ../../Source/PlaylistComponent.cpp; sourceTree = SOURCE_ROOT; };
 		A4C66FC0071240569E5097CC /* MainComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MainComponent.cpp; path = ../../Source/MainComponent.cpp; sourceTree = SOURCE_ROOT; };
 		B5F24A526214814026201407 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
@@ -217,6 +220,8 @@
 		FE232099228FB0451AAB63A0 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				91408B1C27D83C8A8E86EE59 /* DnDLoader.cpp */,
+				A0C7C3DF16F07D7230428C7E /* DnDLoader.h */,
 				DB0D4901A8C3EC76D74DA6D1 /* PlaylistStorage.cpp */,
 				D45925AB894E17B7833EF77B /* PlaylistStorage.h */,
 				1F23B65F5F745B2648984B86 /* Track.cpp */,
@@ -322,6 +327,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF3DDBDD167024092744B00F /* DnDLoader.cpp in Sources */,
 				9402233C8D573468A59E2919 /* PlaylistStorage.cpp in Sources */,
 				5CB087B393EB5FCCD0237C2F /* Track.cpp in Sources */,
 				209ADE3AA8E01696BEF0E1F2 /* PlaylistComponent.cpp in Sources */,

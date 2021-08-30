@@ -23,6 +23,16 @@ std::string Track::getTitle()
     return title;
 }
 
+const bool operator== (const Track& t1, const Track& t2)
+{
+    return t1.title == t2.title;
+}
+
+const bool operator!= (const Track& t1, const Track& t2)
+{
+    return t1.title != t2.title;
+}
+
 //std::string Track::getLength() {
 //    //auto* reader = formatManager.createReaderFor(url.createInputStream(false));
 //    

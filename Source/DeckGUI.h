@@ -13,22 +13,19 @@
 #include <JuceHeader.h>
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
-#include "PlaylistComponent.h"
 //==============================================================================
 /*
 */
 class DeckGUI  : public juce::Component,
                  public juce::Button::Listener,
                  public juce::Slider::Listener,
-                 public juce::FileDragAndDropTarget,
                  public juce::Timer
 {
 public:
     DeckGUI(
             DJAudioPlayer* _player,
             juce::AudioFormatManager &formatManagerToUse,
-            juce::AudioThumbnailCache &cacheToUse,
-            PlaylistComponent* playlist
+            juce::AudioThumbnailCache &cacheToUse
     );
     ~DeckGUI() override;
 
@@ -41,23 +38,18 @@ public:
     /** implement Slider::Listener */
     void sliderValueChanged(juce::Slider *) override;
     
-    bool isInterestedInFileDrag(const juce::StringArray &files) override;
-    void filesDropped(const juce::StringArray &files, int x, int y) override;
-    
     void timerCallback();
     
     void loadFile(juce::File file);
 private:
     juce::TextButton playButton{"PLAY"};
     juce::TextButton stopButton{"STOP"};
-    juce::TextButton loadButton{"LOAD"};
     
     juce::Slider volSlider;
     juce::Slider speedSlider;
     juce::Slider positionSlider;
     
     DJAudioPlayer *player;
-    PlaylistComponent *playlist;
     
     WaveformDisplay waveformDisplay;
     

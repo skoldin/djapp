@@ -15,13 +15,15 @@
 #include <string>
 #include "Track.h"
 #include "PlaylistStorage.h"
+#include "DnDLoader.h"
 
 //==============================================================================
 /*
 */
 class PlaylistComponent  : public juce::Component,
                            public juce::TableListBoxModel,
-                           public juce::Button::Listener
+                           public juce::Button::Listener,
+                           public DnDLoader
 {
 public:
     PlaylistComponent(juce::AudioFormatManager &formatManagerToUse);
@@ -42,11 +44,10 @@ public:
         
     void addTrack(juce::File file);
     
-//    bool isInterestedInFileDrag(const juce::StringArray &files) override;
-//    void filesDropped(const juce::StringArray &files, int x, int y) override;
+    void loadFile(juce::File file) override;
 
 private:
-    
+    juce::TextButton loadButton{"LOAD"};
     juce::TableListBox tableComponent;
     
     std::vector<Track> tracks;
@@ -54,6 +55,8 @@ private:
     juce::AudioFormatManager formatManager;
     
     PlaylistStorage playlistStorage;
+    
+    bool hasTrack(Track track);
     
     const int titleColumnId = 1;
     const int lengthColumnId = 2;

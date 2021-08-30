@@ -26,9 +26,11 @@ PlaylistComponent::PlaylistComponent(juce::AudioFormatManager &formatManager)
     
     tableComponent.setModel(this);
     
+    addAndMakeVisible(loadButton);
+    
     tracks = playlistStorage.getTracks();
     
-    tableComponent.updateContent();
+    loadButton.addListener(this);
 }
 
 PlaylistComponent::~PlaylistComponent()
@@ -57,9 +59,10 @@ void PlaylistComponent::paint (juce::Graphics& g)
 
 void PlaylistComponent::resized()
 {
-    // This method is where you should set the bounds of any child
-    // components that your component contains..
-    tableComponent.setBounds(0, 0, getWidth(), getHeight());
+    double rowHeight = getHeight() / 8;
+
+    tableComponent.setBounds(0, 0, getWidth(), getHeight() - rowHeight);
+    loadButton.setBounds(0, getHeight() - rowHeight, getWidth(), rowHeight);
 }
 
 int PlaylistComponent::getNumRows()
@@ -111,28 +114,50 @@ juce::Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int c
 
 void PlaylistComponent::buttonClicked(juce::Button* button)
 {
-    int id = std::stoi(button->getComponentID().toStdString());
-    std::cout  <<  "PlaylistComponent::buttonClicked " << tracks[id].getTitle() << std::endl;
+//    int id = std::stoi(button->getComponentID().toStdString());
+//    std::cout  <<  "PlaylistComponent::buttonClicked " << tracks[id].getTitle() << std::endl;
+    
+    if (button == &loadButton)
+    {
+        juce::FileChooser chooser{"Select a file..."};
+    
+        if (chooser.browseForFileToOpen())
+        {
+            addTrack(chooser.getResult());
+        }
+    } else {
+        std::cout << "SOMETHING ELSE" << std::endl;
+    }
 }
 
 void PlaylistComponent::addTrack(juce::File file)
 {
-//    std::cout << "Added track " << track.getTitle() << std::endl;
-    //  TODO: investigate why it is needed to register formats here, maybe the original pointer is not passed through and this is a new instance
-    tracks.push_back(Track{file});
+    Track track (file);
+    
+    if (hasTrack(track))
+    {
+        std::cout << "PlaylistComponent::addTrack Track already exists in the playlist" << std::endl;
+        return;
+    }
+    
+    tracks.push_back(track);
     playlistStorage.addTrack(file);
     tableComponent.updateContent();
 }
 
-//bool PlaylistComponent::isInterestedInFileDrag(const juce::StringArray &files) {
-//    std::cout  <<  "PlaylistComponent::isInterestedInFileDrag" << std::endl;
-//    return true;
-//    
-//}
-//void PlaylistComponent::filesDropped(const juce::StringArray &files, int x, int y) {
-//    std::cout  <<  "PlaylistComponent::filesDropped" << std::endl;
-//    if (files.size() == 1)
-//    {
-//        // TODO: load into the library
-//    }
-//}
+bool PlaylistComponent::hasTrack(Track trackToCheck)
+{
+    for (auto& track : tracks)
+    {
+        if (trackToCheck == track) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+void PlaylistComponent::loadFile(juce::File file)
+{
+    addTrack(file);
+}

@@ -18,6 +18,9 @@ class Track {
         Track(juce::File file);
         std::string getTitle();
 //        std::string getLength();
+    
+        const friend bool operator== (const Track& t1, const Track& t2);
+        const friend bool operator!= (const Track& t1, const Track& t2);
     private:
         juce::URL url;
         std::string title;
