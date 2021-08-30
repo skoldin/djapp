@@ -7,6 +7,7 @@
 
   ==============================================================================
 */
+#include <sstream>
 #include <iostream>
 #include <fstream>
 #include "PlaylistStorage.h"
@@ -33,12 +34,11 @@ void PlaylistStorage::addTrack(juce::File file)
     
     output.setNewLineString("\n");
 
-    output.writeText(file.getFileName().toStdString() + ",", true, true, output.getNewLineString().toStdString().c_str());
-    
-    output.writeText(file.getFullPathName().toStdString() + output.getNewLineString().toStdString(), true, false, nullptr);
+    output.writeText(file.getFullPathName().toStdString() + output.getNewLineString().toStdString(), true, true, output.getNewLineString().toStdString().c_str());
     
     output.flush();
 }
+
 
 std::vector<Track> PlaylistStorage::getTracks()
 {
@@ -46,6 +46,8 @@ std::vector<Track> PlaylistStorage::getTracks()
     std::vector<Track> tracks;
     
     juce::File storageFile (storageFilePath);
+    
+    std::cout << "LOAD STORAGE FILE " << storageFilePath << std::endl;
     
     if (!storageFile.existsAsFile())
     {
@@ -57,7 +59,19 @@ std::vector<Track> PlaylistStorage::getTracks()
     
     std::cout << playlistContent << std::endl;
     
-    // TODO: read track by track, load and add to tracks
+    std::string result;
+    std::stringstream ss(playlistContent.toStdString());
+    
+    while(std::getline(ss, result, '\n'))
+    {
+        double firstSlashPos = result.find("/");
+        
+        result = result.substr(firstSlashPos, result.length() - firstSlashPos);
+        
+        juce::File currentFile (result);
+        Track track {currentFile};
+        tracks.push_back(track);
+    }
     
     return tracks;
 }

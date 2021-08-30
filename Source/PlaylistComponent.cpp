@@ -17,8 +17,6 @@ PlaylistComponent::PlaylistComponent(juce::AudioFormatManager &formatManager)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-//    trackTitles.push_back("Track 1");
-//    trackTitles.push_back("Track 2");
     
     addAndMakeVisible(tableComponent);
     
@@ -28,7 +26,9 @@ PlaylistComponent::PlaylistComponent(juce::AudioFormatManager &formatManager)
     
     tableComponent.setModel(this);
     
-    std::vector<Track> tracks = playlistStorage.getTracks();
+    tracks = playlistStorage.getTracks();
+    
+    tableComponent.updateContent();
 }
 
 PlaylistComponent::~PlaylistComponent()
