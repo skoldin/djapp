@@ -12,7 +12,7 @@
 #include <JuceHeader.h>
 
 Track::Track(juce::File file) :
-    url(juce::URL{file}),
+    file(file),
     title(file.getFileName().toStdString())
 {
     // auto* reader = formatManager.createReaderFor(url.createInputStream(false));
@@ -31,6 +31,11 @@ const bool operator== (const Track& t1, const Track& t2)
 const bool operator!= (const Track& t1, const Track& t2)
 {
     return t1.title != t2.title;
+}
+
+juce::File Track::getFile()
+{
+    return file;
 }
 
 //std::string Track::getLength() {

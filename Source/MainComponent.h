@@ -35,10 +35,10 @@ private:
     DJAudioPlayer player1{formatManager};
     DJAudioPlayer player2{formatManager};
     
-    PlaylistComponent playlistComponent{formatManager};
-    
     DeckGUI deckGUI1{&player1, formatManager, thumbCache};
     DeckGUI deckGUI2{&player2, formatManager, thumbCache};
+    
+    PlaylistComponent playlistComponent{deckGUI1};
     
     juce::MixerAudioSource mixerSource;
 

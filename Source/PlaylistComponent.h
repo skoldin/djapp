@@ -16,6 +16,7 @@
 #include "Track.h"
 #include "PlaylistStorage.h"
 #include "DnDLoader.h"
+#include "DeckGUI.h"
 
 //==============================================================================
 /*
@@ -26,7 +27,7 @@ class PlaylistComponent  : public juce::Component,
                            public DnDLoader
 {
 public:
-    PlaylistComponent(juce::AudioFormatManager &formatManagerToUse);
+    PlaylistComponent(DeckGUI &deck1);
     ~PlaylistComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -50,9 +51,12 @@ private:
     juce::TextButton loadButton{"LOAD"};
     juce::TableListBox tableComponent;
     
+    DeckGUI &deck1;
+    DeckGUI &deck2;
+    
     std::vector<Track> tracks;
     
-    juce::AudioFormatManager formatManager;
+//    juce::AudioFormatManager formatManager;
     
     PlaylistStorage playlistStorage;
     

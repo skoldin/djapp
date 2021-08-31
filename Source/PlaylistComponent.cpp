@@ -13,7 +13,7 @@
 #include "Track.h"
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent(juce::AudioFormatManager &formatManager)
+PlaylistComponent::PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2) : deck1(deck1), deck2(deck2)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -95,7 +95,7 @@ void PlaylistComponent::paintCell (juce::Graphics & g, int rowNumber, int column
 
 juce::Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnId, bool isRowSelected, juce::Component * existingComponentToUpdate)
 {
-    if (columnId == 3)
+    if (columnId == buttonColumnId)
     {
         if (existingComponentToUpdate == nullptr)
         {
@@ -106,6 +106,8 @@ juce::Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int c
             
             btn->addListener(this);
             existingComponentToUpdate = btn;
+            
+//            std::cout << "PlaylistComponent::refreshComponentForCell " << tracks[rowNumber].getTitle() << std::endl;
         }
     }
     
@@ -125,8 +127,11 @@ void PlaylistComponent::buttonClicked(juce::Button* button)
         {
             addTrack(chooser.getResult());
         }
-    } else {
-        std::cout << "SOMETHING ELSE" << std::endl;
+    } else
+    {
+        std::string id = button->getComponentID().toStdString();
+        deck1.loadFile(tracks[std::stoi(id)].getFile());
+//        std::cout << "PlaylistComponent::buttonClicked " << tracks[std::stoi(id)].getTitle() << std::endl;
     }
 }
 

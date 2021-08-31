@@ -17,12 +17,13 @@ class Track {
     public:
         Track(juce::File file);
         std::string getTitle();
+        juce::File getFile();
 //        std::string getLength();
     
         const friend bool operator== (const Track& t1, const Track& t2);
         const friend bool operator!= (const Track& t1, const Track& t2);
     private:
-        juce::URL url;
+        juce::File file;
         std::string title;
 //        int length;
 //        juce::AudioFormatManager &formatManager;
