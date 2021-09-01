@@ -20,9 +20,10 @@ PlaylistComponent::PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2) : deck1(dec
     
     addAndMakeVisible(tableComponent);
     
-    tableComponent.getHeader().addColumn("Track title", titleColumnId, 400);
-    tableComponent.getHeader().addColumn("Length", lengthColumnId, 200);
-    tableComponent.getHeader().addColumn("", buttonColumnId, 200);
+    tableComponent.getHeader().addColumn("Track title", ColumnIds::titleColumnId, 400);
+    tableComponent.getHeader().addColumn("Length", ColumnIds::lengthColumnId, 200);
+    tableComponent.getHeader().addColumn("Deck", ColumnIds::deckSelectColumnId, 100);
+    tableComponent.getHeader().addColumn("", ColumnIds::buttonColumnId, 100);
     
     tableComponent.setModel(this);
     
@@ -84,10 +85,10 @@ void PlaylistComponent::paintRowBackground (juce::Graphics & g, int rowNumber, i
 void PlaylistComponent::paintCell (juce::Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected)
 {
 
-    if (columnId == titleColumnId)
+    if (columnId == ColumnIds::titleColumnId)
     {
         g.drawText(tracks[rowNumber].getTitle(), 2, 0, width - 4, height, juce::Justification::centredLeft, true);
-    } else if (columnId == lengthColumnId)
+    } else if (columnId == ColumnIds::lengthColumnId)
     {
 //        g.drawText(tracks[rowNumber].getLength(), 2, 0, width - 4, height, juce::Justification::centredLeft, true);
     }
@@ -95,19 +96,41 @@ void PlaylistComponent::paintCell (juce::Graphics & g, int rowNumber, int column
 
 juce::Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int columnId, bool isRowSelected, juce::Component * existingComponentToUpdate)
 {
-    if (columnId == buttonColumnId)
+    juce::String id{std::to_string(rowNumber)};
+    
+    if (columnId == ColumnIds::buttonColumnId)
+    {
+        
+        if (existingComponentToUpdate == nullptr)
+        {
+            juce::TextButton* btn = new juce::TextButton{"load"};
+            
+            btn->setComponentID(id);
+            btn->addListener(this);
+            
+            existingComponentToUpdate = btn;
+        };
+        
+        // if no deck chosen in this row, disable the button
+        int selectedDeck = deckChoosers[rowNumber]->getSelectedId();
+        
+        existingComponentToUpdate->setEnabled(selectedDeck != 0);
+    } else if (columnId == ColumnIds::deckSelectColumnId)
     {
         if (existingComponentToUpdate == nullptr)
         {
-            juce::TextButton* btn = new juce::TextButton{"play"};
+            juce::ComboBox* deckChoice = new juce::ComboBox;
             
-            juce::String id{std::to_string(rowNumber)};
-            btn->setComponentID(id);
+            deckChoice->setComponentID(id);
             
-            btn->addListener(this);
-            existingComponentToUpdate = btn;
+            deckChoice->addItem ("1",  1);
+            deckChoice->addItem ("2",   2);
             
-//            std::cout << "PlaylistComponent::refreshComponentForCell " << tracks[rowNumber].getTitle() << std::endl;
+            deckChoice->onChange = [this] { tableComponent.updateContent(); };
+            
+            deckChoosers[rowNumber] = deckChoice;
+            
+            existingComponentToUpdate = deckChoice;
         }
     }
     
@@ -116,9 +139,6 @@ juce::Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int c
 
 void PlaylistComponent::buttonClicked(juce::Button* button)
 {
-//    int id = std::stoi(button->getComponentID().toStdString());
-//    std::cout  <<  "PlaylistComponent::buttonClicked " << tracks[id].getTitle() << std::endl;
-    
     if (button == &loadButton)
     {
         juce::FileChooser chooser{"Select a file..."};
@@ -130,8 +150,17 @@ void PlaylistComponent::buttonClicked(juce::Button* button)
     } else
     {
         std::string id = button->getComponentID().toStdString();
-        deck1.loadFile(tracks[std::stoi(id)].getFile());
-//        std::cout << "PlaylistComponent::buttonClicked " << tracks[std::stoi(id)].getTitle() << std::endl;
+        // get deck id from the corresponding chooser
+        int chosenDeck = deckChoosers[std::stoi(id)]->getSelectedId();
+        juce::File fileToLoad = tracks[std::stoi(id)].getFile();
+        
+        if (chosenDeck == 1)
+        {
+            deck1.loadFile(tracks[std::stoi(id)].getFile());
+        } else if (chosenDeck == 2)
+        {
+            deck2.loadFile(tracks[std::stoi(id)].getFile());
+        }
     }
 }
 

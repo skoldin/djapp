@@ -27,7 +27,7 @@ class PlaylistComponent  : public juce::Component,
                            public DnDLoader
 {
 public:
-    PlaylistComponent(DeckGUI &deck1);
+    PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2);
     ~PlaylistComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -60,11 +60,17 @@ private:
     
     PlaylistStorage playlistStorage;
     
+    std::map<int, juce::ComboBox*> deckChoosers;
+    
     bool hasTrack(Track track);
     
-    const int titleColumnId = 1;
-    const int lengthColumnId = 2;
-    const int buttonColumnId = 3;
+    enum ColumnIds
+    {
+        titleColumnId = 1,
+        lengthColumnId,
+        deckSelectColumnId,
+        buttonColumnId
+    };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };
