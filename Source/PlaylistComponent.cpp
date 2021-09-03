@@ -17,7 +17,7 @@ PlaylistComponent::PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2) : deck1(dec
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    
+    addAndMakeVisible(searchField);
     addAndMakeVisible(tableComponent);
     
     tableComponent.getHeader().addColumn("Track title", ColumnIds::titleColumnId, 400);
@@ -29,9 +29,12 @@ PlaylistComponent::PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2) : deck1(dec
     
     addAndMakeVisible(loadButton);
     
-    tracks = playlistStorage.getTracks();
+    allTracks = playlistStorage.getTracks();
+    tracks = allTracks;
     
     loadButton.addListener(this);
+    
+    searchField.onTextChange = [this] { this->searchTracks(searchField.getText().toStdString()); tableComponent.updateContent(); };
 }
 
 PlaylistComponent::~PlaylistComponent()
@@ -40,13 +43,6 @@ PlaylistComponent::~PlaylistComponent()
 
 void PlaylistComponent::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
@@ -60,9 +56,10 @@ void PlaylistComponent::paint (juce::Graphics& g)
 
 void PlaylistComponent::resized()
 {
-    double rowHeight = getHeight() / 8;
+    double rowHeight = getHeight() / ROWS_NUMBER;
 
-    tableComponent.setBounds(0, 0, getWidth(), getHeight() - rowHeight);
+    searchField.setBounds(0, 0, getWidth(), rowHeight);
+    tableComponent.setBounds(0, rowHeight, getWidth(), getHeight() - rowHeight * 2);
     loadButton.setBounds(0, getHeight() - rowHeight, getWidth(), rowHeight);
 }
 
@@ -123,8 +120,9 @@ juce::Component* PlaylistComponent::refreshComponentForCell(int rowNumber, int c
             
             deckChoice->setComponentID(id);
             
-            deckChoice->addItem ("1",  1);
-            deckChoice->addItem ("2",   2);
+            deckChoice->addItem ("1", 1);
+            deckChoice->addItem ("2", 2);
+            deckChoice->addItem ("1 & 2", 3);
             
             deckChoice->onChange = [this] { tableComponent.updateContent(); };
             
@@ -154,10 +152,12 @@ void PlaylistComponent::buttonClicked(juce::Button* button)
         int chosenDeck = deckChoosers[std::stoi(id)]->getSelectedId();
         juce::File fileToLoad = tracks[std::stoi(id)].getFile();
         
-        if (chosenDeck == 1)
+        if (chosenDeck == 1 || chosenDeck == 3)
         {
             deck1.loadFile(tracks[std::stoi(id)].getFile());
-        } else if (chosenDeck == 2)
+        }
+        
+        if (chosenDeck == 2 || chosenDeck == 3)
         {
             deck2.loadFile(tracks[std::stoi(id)].getFile());
         }
@@ -194,4 +194,25 @@ bool PlaylistComponent::hasTrack(Track trackToCheck)
 void PlaylistComponent::loadFile(juce::File file)
 {
     addTrack(file);
+}
+
+void PlaylistComponent::searchTracks(std::string term)
+{
+    if (term.empty())
+    {
+        tracks = allTracks;
+        return;
+    }
+    
+    std::vector<Track> filteredTracks;
+    
+    for (Track& track : allTracks)
+    {
+        if (track.getTitle().find(term) != std::string::npos)
+        {
+            filteredTracks.push_back(track);
+        }
+    }
+    
+    tracks = filteredTracks;
 }

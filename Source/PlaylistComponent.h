@@ -48,6 +48,10 @@ public:
     void loadFile(juce::File file) override;
 
 private:
+    bool hasTrack(Track track);
+    void searchTracks(std::string term);
+    
+    juce::TextEditor searchField{"search_field"};
     juce::TextButton loadButton{"LOAD"};
     juce::TableListBox tableComponent;
     
@@ -55,14 +59,13 @@ private:
     DeckGUI &deck2;
     
     std::vector<Track> tracks;
+    std::vector<Track> allTracks;
     
 //    juce::AudioFormatManager formatManager;
     
     PlaylistStorage playlistStorage;
     
     std::map<int, juce::ComboBox*> deckChoosers;
-    
-    bool hasTrack(Track track);
     
     enum ColumnIds
     {
@@ -71,6 +74,8 @@ private:
         deckSelectColumnId,
         buttonColumnId
     };
+    
+    const int ROWS_NUMBER = 8;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };
