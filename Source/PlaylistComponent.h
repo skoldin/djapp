@@ -17,6 +17,7 @@
 #include "PlaylistStorage.h"
 #include "DnDLoader.h"
 #include "DeckGUI.h"
+#include "DJAudioPlayer.h"
 
 //==============================================================================
 /*
@@ -27,7 +28,7 @@ class PlaylistComponent  : public juce::Component,
                            public DnDLoader
 {
 public:
-    PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2);
+    PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2, DJAudioPlayer* player);
     ~PlaylistComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -51,6 +52,7 @@ private:
     bool hasTrack(Track track);
     void searchTracks(std::string term);
     
+    juce::Label searchLabel{"search_field", "Search: "};
     juce::TextEditor searchField{"search_field"};
     juce::TextButton loadButton{"LOAD"};
     juce::TableListBox tableComponent;
@@ -58,14 +60,18 @@ private:
     DeckGUI &deck1;
     DeckGUI &deck2;
     
-    std::vector<Track> tracks;
-    std::vector<Track> allTracks;
+    // use audio player to get song length
+    DJAudioPlayer* player;
     
-//    juce::AudioFormatManager formatManager;
+    std::vector<Track> tracks;
+    std::vector<std::string> allTracksPaths;
+    std::vector<Track> allTracks;
     
     PlaylistStorage playlistStorage;
     
     std::map<int, juce::ComboBox*> deckChoosers;
+    
+    std::string getLength();
     
     enum ColumnIds
     {
@@ -76,6 +82,8 @@ private:
     };
     
     const int ROWS_NUMBER = 8;
+    
+    
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };

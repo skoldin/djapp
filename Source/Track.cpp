@@ -15,7 +15,12 @@ Track::Track(juce::File file) :
     file(file),
     title(file.getFileName().toStdString())
 {
-    // auto* reader = formatManager.createReaderFor(url.createInputStream(false));
+}
+
+Track::Track(std::string path)
+{
+    file = juce::File (path);
+    title = file.getFileName().toStdString();
 }
 
 std::string Track::getTitle()
@@ -37,18 +42,3 @@ juce::File Track::getFile()
 {
     return file;
 }
-
-//std::string Track::getLength() {
-//    //auto* reader = formatManager.createReaderFor(url.createInputStream(false));
-//    
-////    std::cout << reader->sampleRate << std::endl;
-//
-//    if (reader != nullptr)
-//    {
-//        std::unique_ptr<juce::AudioFormatReaderSource> newSource (new juce::AudioFormatReaderSource(reader, true));
-////        transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
-////        readerSource.reset (newSource.release());
-//    }
-//    
-//    return "1";
-//};

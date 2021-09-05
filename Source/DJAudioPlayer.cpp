@@ -83,3 +83,32 @@ double DJAudioPlayer::getPositionRelative()
     
     return transportSource.getCurrentPosition() / transportSource.getLengthInSeconds();
 }
+
+
+std::string DJAudioPlayer::getFormattedTrackLength(juce::URL audioURL)
+{
+    loadURL(audioURL);
+    
+    const int secondsInMinute = 60;
+    int lengthInSeconds = int(transportSource.getLengthInSeconds());
+    
+    int minutes = lengthInSeconds / secondsInMinute;
+    int seconds = lengthInSeconds % secondsInMinute;
+    
+    std::string minutesStr = std::to_string(minutes);
+    std::string secondsStr = std::to_string(seconds);
+    
+    if (minutes < 10)
+    {
+        minutesStr = "0" + minutesStr;
+    }
+    
+    if (seconds < 10)
+    {
+        secondsStr = "0" + secondsStr;
+    }
+    
+    std::cout << minutes << " Minutes " << seconds << " Seconds" << std::endl;
+    
+    return minutesStr + ":" + secondsStr;
+}

@@ -38,7 +38,7 @@ private:
     DeckGUI deckGUI1{&player1, formatManager, thumbCache};
     DeckGUI deckGUI2{&player2, formatManager, thumbCache};
     
-    PlaylistComponent playlistComponent{deckGUI1, deckGUI2};
+    PlaylistComponent playlistComponent{deckGUI1, deckGUI2, &player1};
     
     juce::MixerAudioSource mixerSource;
 

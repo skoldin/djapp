@@ -17,13 +17,6 @@ void PlaylistStorage::addTrack(juce::File file)
     std::cout << storageFilePath << std::endl;
     
     juce::File storageFile (storageFilePath);
-    
-//    if (!storageFile.existsAsFile())
-//    {
-//        std::cout << "PlaylistStorage::addTrack File does not exist" << std::endl;
-//        return;
-//    }
-    
     juce::FileOutputStream output (storageFile);
     
     if (!output.openedOk())
@@ -40,10 +33,10 @@ void PlaylistStorage::addTrack(juce::File file)
 }
 
 
-std::vector<Track> PlaylistStorage::getTracks()
+std::vector<std::string> PlaylistStorage::getTracks()
 {
     std::cout << "PlaylistStorage::getTracks" << std::endl;
-    std::vector<Track> tracks;
+    std::vector<std::string> paths;
     
     juce::File storageFile (storageFilePath);
     
@@ -52,7 +45,7 @@ std::vector<Track> PlaylistStorage::getTracks()
     if (!storageFile.existsAsFile())
     {
         std::cout << "PlaylistStorage::getTracks File does not exist" << std::endl;
-        return tracks;
+        return paths;
     }
     
     auto playlistContent = storageFile.loadFileAsString();
@@ -68,10 +61,8 @@ std::vector<Track> PlaylistStorage::getTracks()
         
         result = result.substr(firstSlashPos, result.length() - firstSlashPos);
         
-        juce::File currentFile (result);
-        Track track {currentFile};
-        tracks.push_back(track);
+        paths.push_back(result);
     }
     
-    return tracks;
+    return paths;
 }

@@ -13,12 +13,17 @@
 #include "Track.h"
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2) : deck1(deck1), deck2(deck2)
+PlaylistComponent::PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2, DJAudioPlayer* player) : deck1(deck1), deck2(deck2), player(player)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
+    addAndMakeVisible(searchLabel);
     addAndMakeVisible(searchField);
     addAndMakeVisible(tableComponent);
+    
+    searchLabel.attachToComponent(&searchField, true);
+    searchLabel.setText ("Search: ", juce::dontSendNotification);
+    searchLabel.setJustificationType (juce::Justification::left);
     
     tableComponent.getHeader().addColumn("Track title", ColumnIds::titleColumnId, 400);
     tableComponent.getHeader().addColumn("Length", ColumnIds::lengthColumnId, 200);
@@ -29,7 +34,11 @@ PlaylistComponent::PlaylistComponent(DeckGUI &deck1, DeckGUI &deck2) : deck1(dec
     
     addAndMakeVisible(loadButton);
     
-    allTracks = playlistStorage.getTracks();
+    for (auto trackPath : playlistStorage.getTracks())
+    {
+        allTracks.push_back(Track (trackPath));
+    }
+    
     tracks = allTracks;
     
     loadButton.addListener(this);
@@ -58,7 +67,7 @@ void PlaylistComponent::resized()
 {
     double rowHeight = getHeight() / ROWS_NUMBER;
 
-    searchField.setBounds(0, 0, getWidth(), rowHeight);
+    searchField.setBounds(100, 0, getWidth() - 100, rowHeight);
     tableComponent.setBounds(0, rowHeight, getWidth(), getHeight() - rowHeight * 2);
     loadButton.setBounds(0, getHeight() - rowHeight, getWidth(), rowHeight);
 }
@@ -87,7 +96,9 @@ void PlaylistComponent::paintCell (juce::Graphics & g, int rowNumber, int column
         g.drawText(tracks[rowNumber].getTitle(), 2, 0, width - 4, height, juce::Justification::centredLeft, true);
     } else if (columnId == ColumnIds::lengthColumnId)
     {
-//        g.drawText(tracks[rowNumber].getLength(), 2, 0, width - 4, height, juce::Justification::centredLeft, true);
+        auto trackLength = player->getFormattedTrackLength(juce::URL(tracks[rowNumber].getFile()));
+        
+        g.drawText(trackLength, 2, 0, width - 4, height, juce::Justification::centredLeft, true);
     }
 };
 

@@ -44,6 +44,9 @@ public:
     /**  get the rellative position of the playhead */
     double getPositionRelative();
     
+    /** get track length formatted for displaying */
+    std::string getFormattedTrackLength(juce::URL audioURL);
+    
 private:
     juce::AudioFormatManager &formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
