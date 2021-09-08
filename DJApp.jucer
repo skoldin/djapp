@@ -5,6 +5,10 @@
               cppLanguageStandard="17">
   <MAINGROUP id="fMuKV6" name="DJApp">
     <GROUP id="{C57FAC6E-50D6-F836-D0F3-9BC224FED899}" name="Source">
+      <FILE id="vFsbFw" name="SlidersLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/SlidersLookAndFeel.cpp"/>
+      <FILE id="B6561r" name="SlidersLookAndFeel.h" compile="0" resource="0"
+            file="Source/SlidersLookAndFeel.h"/>
       <FILE id="Es792Z" name="DnDLoader.cpp" compile="1" resource="0" file="Source/DnDLoader.cpp"/>
       <FILE id="NtDAgi" name="DnDLoader.h" compile="0" resource="0" file="Source/DnDLoader.h"/>
       <FILE id="WJcoQ9" name="PlaylistStorage.cpp" compile="1" resource="0"
@@ -55,7 +59,7 @@
     </LINUX_MAKE>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="DJApp"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="DJApp" osxCompatibility="10.15 SDK"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="DJApp" osxCompatibility="10.15 SDK"/>
       </CONFIGURATIONS>
       <MODULEPATHS>

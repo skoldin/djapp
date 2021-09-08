@@ -112,3 +112,8 @@ std::string DJAudioPlayer::getFormattedTrackLength(juce::URL audioURL)
     
     return minutesStr + ":" + secondsStr;
 }
+
+bool DJAudioPlayer::isPlaying()
+{
+    return transportSource.isPlaying();
+}

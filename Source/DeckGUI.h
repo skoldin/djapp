@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
+#include "SlidersLookAndFeel.h"
 //==============================================================================
 /*
 */
@@ -42,12 +43,18 @@ public:
     
     void loadFile(juce::File file);
 private:
-    juce::TextButton playButton{"PLAY"};
-    juce::TextButton stopButton{"STOP"};
+    SlidersLookAndFeel slidersLookAndFeel;
     
-    juce::Slider volSlider;
-    juce::Slider speedSlider;
-    juce::Slider positionSlider;
+    juce::TextButton playStopButton{"PLAY"};
+    
+    juce::Slider volSlider{juce::Slider::Rotary, juce::Slider::TextEntryBoxPosition::TextBoxBelow};
+    juce::Slider speedSlider{juce::Slider::Rotary, juce::Slider::TextEntryBoxPosition::TextBoxBelow};
+    juce::Slider positionSlider{juce::Slider::LinearHorizontal, juce::Slider::TextEntryBoxPosition::TextBoxBelow};
+    
+    juce::Label  volLabel;
+    juce::Label  speedLabel;
+    juce::Label  positionLabel;
+
     
     DJAudioPlayer *player;
     
@@ -55,6 +62,7 @@ private:
     
     juce::AudioFormatManager formatManager;
     
+    juce::String fileName;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };

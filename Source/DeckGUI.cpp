@@ -14,25 +14,40 @@
 //==============================================================================
 DeckGUI::DeckGUI(DJAudioPlayer* _player, juce::AudioFormatManager &formatManagerToUse, juce::AudioThumbnailCache &cacheToUse) : player(_player), waveformDisplay(formatManagerToUse, cacheToUse)
 {
-    addAndMakeVisible(playButton);
-    addAndMakeVisible(stopButton);
+    addAndMakeVisible(playStopButton);
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
     addAndMakeVisible(positionSlider);
     addAndMakeVisible(waveformDisplay);
     
-    playButton.addListener(this);
-    stopButton.addListener(this);
+    playStopButton.addListener(this);
 
     volSlider.addListener(this);
     volSlider.setRange(0.0, 1.0);
     volSlider.setValue(0.5);
+    volSlider.setLookAndFeel (&slidersLookAndFeel);
     
     speedSlider.addListener(this);
     speedSlider.setValue(1.0);
+    speedSlider.setLookAndFeel (&slidersLookAndFeel);
+    
+    addAndMakeVisible (volLabel);
+    volLabel.setText ("Volume", juce::dontSendNotification);
+    volLabel.attachToComponent (&volSlider, false);
+    volLabel.setJustificationType(juce::Justification::centredTop);
+    
+    addAndMakeVisible (speedLabel);
+    speedLabel.setText ("Speed", juce::dontSendNotification);
+    speedLabel.attachToComponent (&speedSlider, false);
+    speedLabel.setJustificationType(juce::Justification::centredTop);
 
     positionSlider.addListener(this);
     positionSlider.setRange(0.0, 1.0);
+    
+    addAndMakeVisible (positionLabel);
+    positionLabel.setText ("Position", juce::dontSendNotification);
+    positionLabel.attachToComponent (&positionSlider, false);
+    positionLabel.setJustificationType(juce::Justification::centredTop);
 
     startTimer(100);
 }
@@ -44,12 +59,7 @@ DeckGUI::~DeckGUI()
 
 void DeckGUI::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
+    double rowHeight = getHeight() / 8;
 
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
@@ -58,31 +68,37 @@ void DeckGUI::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    g.drawText ("DeckGUI", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    
+    g.drawText (fileName, 120, 0, getWidth() - 100, rowHeight, juce::Justification::left);   // draw some placeholder text
+    
+    playStopButton.setEnabled(!fileName.isEmpty());
 }
 
 void DeckGUI::resized()
 {
     double rowHeight = getHeight() / 8;
-    playButton.setBounds(0, 0, getWidth(), rowHeight);
-    stopButton.setBounds(0, rowHeight, getWidth(), rowHeight);
-    volSlider.setBounds(0, rowHeight * 3, getWidth(), rowHeight);
-    speedSlider.setBounds(0, rowHeight * 4, getWidth(), rowHeight);
+    playStopButton.setBounds(0, 0, 100, rowHeight);
+    volSlider.setBounds(0, rowHeight * 2, getWidth() / 2, rowHeight * 2);
+    speedSlider.setBounds(getWidth() / 2, rowHeight * 2, getWidth() / 2, rowHeight * 2);
     positionSlider.setBounds(0, rowHeight * 5, getWidth(), rowHeight);
     waveformDisplay.setBounds(0, rowHeight * 6, getWidth(), rowHeight * 2);
 }
 
 void DeckGUI::buttonClicked(juce::Button *button)
 {
-    if (button == &playButton)
+    if (button == &playStopButton)
     {
-        std::cout << "Play button was clicked" << std::endl;
-        player->start();
-    } else if (button == &stopButton)
-    {
-        std::cout << "Stop button was clicked" << std::endl;
-        player->stop();
+        if (!player->isPlaying())
+        {
+            std::cout << "Play button was clicked" << std::endl;
+            player->start();
+            button->setButtonText("STOP");
+        } else
+        {
+            std::cout << "Stop button was clicked" << std::endl;
+            player->stop();
+            button->setButtonText("PLAY");
+        }
     }
 }
 
@@ -110,4 +126,7 @@ void DeckGUI::loadFile(juce::File file)
 {
     player->loadURL(juce::URL{file});
     waveformDisplay.loadURL(juce::URL{file});
+    
+    fileName = file.getFileName();
+    repaint();
 }

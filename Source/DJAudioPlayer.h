@@ -47,6 +47,9 @@ public:
     /** get track length formatted for displaying */
     std::string getFormattedTrackLength(juce::URL audioURL);
     
+    /** check if the audio is currently playing */
+    bool isPlaying();
+    
 private:
     juce::AudioFormatManager &formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
