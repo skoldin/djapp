@@ -24,6 +24,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
+    /** load track into waveform display */
     void loadURL(juce::URL audioURL);
     
     void changeListenerCallback (juce::ChangeBroadcaster *source) override;

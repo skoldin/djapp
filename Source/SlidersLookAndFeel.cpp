@@ -12,6 +12,9 @@
 
 SlidersLookAndFeel::SlidersLookAndFeel() {};
 
+/***
+  This is inspired by the following tutorial: https://docs.juce.com/master/tutorial_look_and_feel_customisation.html
+ */
 void SlidersLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
                        const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&)
 {

@@ -39,8 +39,8 @@ public:
     /** implement Slider::Listener */
     void sliderValueChanged(juce::Slider *) override;
     
-    void timerCallback();
-    
+    void timerCallback() override;
+    /** load a file into the deck */
     void loadFile(juce::File file);
 private:
     SlidersLookAndFeel slidersLookAndFeel;

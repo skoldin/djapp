@@ -43,7 +43,8 @@ public:
     juce::Component* refreshComponentForCell(int rowNumber, int columnId, bool isRowSelected, juce::Component * existingComponentToUpdate) override;
     
     void buttonClicked(juce::Button* button) override;
-        
+    
+    /** adds track to the music library */
     void addTrack(juce::File file);
     
     void loadFile(juce::File file) override;
